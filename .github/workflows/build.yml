@@ -38,10 +38,11 @@ jobs:
           GEOIPUPDATE_ACCOUNT_ID: ${{ secrets.GEOIPUPDATE_ACCOUNT_ID }}
           GEOIPUPDATE_LICENSE_KEY: ${{ secrets.GEOIPUPDATE_LICENSE_KEY }}
         run: |
-          docker run --rm --name test -e "GEOIPUPDATE_ACCOUNT_ID=$GEOIPUPDATE_ACCOUNT_ID" -e "GEOIPUPDATE_LICENSE_KEY=$GEOIPUPDATE_LICENSE_KEY" -e 'GEOIPUPDATE_EDITION_IDS=GeoLite2-Country GeoLite2-City GeoLite2-ASN' -v /tmp/GeoIP:/usr/share/GeoIP maxmindinc/geoipupdate
+          mkdir $(pwd)/GeoIP
+          docker run --rm --name test -e "GEOIPUPDATE_ACCOUNT_ID=$GEOIPUPDATE_ACCOUNT_ID" -e "GEOIPUPDATE_LICENSE_KEY=$GEOIPUPDATE_LICENSE_KEY" -e 'GEOIPUPDATE_EDITION_IDS=GeoLite2-Country GeoLite2-City GeoLite2-ASN' -v $(pwd)/GeoIP:/usr/share/GeoIP maxmindinc/geoipupdate
           echo "Download complete"
-          ls -la /tmp/GeoIP
-          sudo chmod 644 /tmp/GeoIP/*.mmdb -R
+          ls -la $(pwd)/GeoIP
+          sudo chmod 644 $(pwd)/GeoIP/*.mmdb -R
           docker build -t aasaam/maxmind-lite-docker .
           docker push aasaam/maxmind-lite-docker
           docker tag aasaam/maxmind-lite-docker ghcr.io/aasaam/maxmind-lite-docker:latest
