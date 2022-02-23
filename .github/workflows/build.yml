@@ -5,7 +5,7 @@ on:
     branches:
       - master
   schedule:
-    - cron:  '0 0 * * 0'
+    - cron:  '0 0 * * WED'
 
 jobs:
   docker:
@@ -35,7 +35,7 @@ jobs:
 
       - name: Build and push
         run: |
-          sweb@sweb-laptop:/sweb/projects/aasaam-infra/maxmind-lite-docker$ docker run --rm --name test -e 'GEOIPUPDATE_ACCOUNT_ID=${{ secrets.GEOIPUPDATE_ACCOUNT_ID }}' -e 'GEOIPUPDATE_LICENSE_KEY=${{ secrets.GEOIPUPDATE_LICENSE_KEY }}' -e 'GEOIPUPDATE_EDITION_IDS=GeoLite2-Country GeoLite2-City GeoLite2-ASN' -v $(pwd)/tmp:/usr/share/GeoIP maxmindinc/geoipupdate
+          docker run --rm --name test -e 'GEOIPUPDATE_ACCOUNT_ID=${{ secrets.GEOIPUPDATE_ACCOUNT_ID }}' -e 'GEOIPUPDATE_LICENSE_KEY=${{ secrets.GEOIPUPDATE_LICENSE_KEY }}' -e 'GEOIPUPDATE_EDITION_IDS=GeoLite2-Country GeoLite2-City GeoLite2-ASN' -v $(pwd)/tmp:/usr/share/GeoIP maxmindinc/geoipupdate
           docker build -t aasaam/maxmind-lite-docker .
           docker push aasaam/maxmind-lite-docker
           docker tag aasaam/maxmind-lite-docker ghcr.io/aasaam/maxmind-lite-docker:latest
